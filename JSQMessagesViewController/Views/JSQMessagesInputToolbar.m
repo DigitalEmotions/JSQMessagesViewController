@@ -89,6 +89,17 @@ static void * kJSQMessagesInputToolbarKeyValueObservingContext = &kJSQMessagesIn
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+// SSharpe : This ensure the toolbar respects the bottom safe area and always sits
+// above the home indicator on iPhone X/XS/XR etc
+-(void) didMoveToWindow{
+    [super didMoveToWindow];
+    if (@available(iOS 11.0, *)) {
+        if (self.window.safeAreaLayoutGuide != nil) {
+            [[self bottomAnchor] constraintLessThanOrEqualToSystemSpacingBelowAnchor:self.window.safeAreaLayoutGuide.bottomAnchor multiplier:1.0].active = YES;
+        }
+    }
+}
+
 #pragma mark - Setters
 
 - (void)setPreferredDefaultHeight:(CGFloat)preferredDefaultHeight
